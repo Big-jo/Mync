@@ -4,7 +4,6 @@ const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const shortid = require('shortid');
-const fl = require('./file_list');
 
 app.use(express.static('public'));
 app.use(bodyParser.json({
