@@ -28,7 +28,7 @@ app.post('/send', (req, res) => {
 
 //  TODO: Modularize the file list function
 app.get('/stream/:id', (req, res) => {
-    fs.readdir(__dirname + '\\user_songs', (err, list) => {
+    fs.readdir(__dirname + '/user_songs', (err, list) => {
         if (err) {
             console.log(err);
             throw err;
