@@ -23,7 +23,7 @@
     <div class="container">
 
         <div class="container">
-             <h1 class="header text-center mt-2">Mync</h1>
+            <h1 class="header text-center mt-2">Mync</h1>
             <div class="mt-3">
                 <div class="mb-3">
                     <h3 class="">Send this key to your Mync partner: </h3>
@@ -44,14 +44,20 @@
                             <label class="custom-file-label" id="file-n">Choose Song !</label>
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <button type="submit" onclick="send()" class="btn btn-primary">Start</button>
+                    <div class="wrapper">
+                        <div class="audio-panel mt-3 mb-3">
+                            <audio controls id="M_audioTag" controlsList="nodownload">
+                                <source src="" type="audio/mp3" id="M_sourceTag">
+                            </audio>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" onclick="send()" class="btn btn-primary">Start</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 </body>
 
 </html>

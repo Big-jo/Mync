@@ -1,3 +1,4 @@
+
 /**
  * REMEMBER:
  *  STEPS
@@ -25,7 +26,16 @@ function listen(){
     audioTag.load();
 }
 
+//For listening on the sending end
+function M_listen(){
+    let audioTag = document.getElementById('M_audioTag')
+    let sourceTag = document.getElementById('M_sourceTag');
+    let key = document.getElementById('key').innerHTML;
+    console.log(key)
+    sourceTag.src = "stream/"+ key;
 
+    audioTag.load();
+}
 
 /**
  * Get an Id Generated on the server
@@ -62,7 +72,6 @@ function send() {
         };
 
         songNameElement.innerHTML = song_to_upload.name;
-        console.log(song_to_upload.name);
 
         $.ajax({
             method: "POST",
@@ -70,7 +79,7 @@ function send() {
             data: JSON.stringify(songData),
             contentType: "application/json",
             success: function () {
-                console.log("Success");
+                M_listen();
             }
         })
     }
