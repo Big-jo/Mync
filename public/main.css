@@ -1,0 +1,55 @@
+/* TODO: Clean Up and Move classes to respective folders */
+/* Media Queries */
+    /*Smart Phones */
+@media only screen and (min-width: 600px){
+    .file-i{
+        width: 100%;
+    }
+}
+    /* Laptops */
+@media only screen and (min-width: 992px) and (max-width:1999px){
+    .file-i{
+        width: 50%;
+    }
+}
+
+/* Media Queries End  */
+html,
+body,
+.container
+ {
+    height: 100%;
+}
+.container-w{
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+}
+.buttons-wrapper{
+    padding: 20px;
+}
+.buttons-container{
+    display: flex;
+    padding: 10px;
+    margin: auto;
+    width: fit-content;
+    position: relative;
+    top:150px;
+}
+/* .wrapper{
+    height: fit-content;
+} */
+button{
+    margin: 5px;
+}
+.txt{
+     display: flex;
+     padding: 10px;
+     margin: auto;
+     width: fit-content;
+     position: relative;
+     top:150px;
+}
+h1{
+    font-weight: bold;
+}
