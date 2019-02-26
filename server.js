@@ -1,5 +1,3 @@
-//  TODO: Modularize the file list function(Create Routes)
-// TODO: Clean up file by choosing uniform commenting 
 
 const express = require('express');
 const app = express();
@@ -16,6 +14,7 @@ if (process.env.NODE_ENV = 'development') {
     const morgan = require('morgan');
     app.use(morgan('dev'));
 }
+
 // Keeps track of music files coming in
 let fileTracker = [];
 
@@ -68,6 +67,7 @@ app.get('/stream/:id', (req, res) => {
                 readStream.pipe(res);
             }
         }
+
     })
 
 });
