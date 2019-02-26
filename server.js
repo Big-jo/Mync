@@ -1,6 +1,6 @@
+
 //  TODO: Modularize the file list function(Create Routes)
 // TODO: Clean up file by choosing uniform commenting 
-
 
 const express = require('express');
 const app = express();
@@ -10,7 +10,8 @@ const io = require('socket.io')(server);
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const shortid = require('shortid');
-
+const path = require('path');
+const config = require('./config/config');
 
 // Keeps track of music files coming in
 let fileTracker = [];
@@ -25,8 +26,6 @@ app.use(bodyParser.json({
 app.get('/', (req, res) => {
     res.send('index.html');
 });
-
-
 
 
 // Erase the users music-file over-time
@@ -52,11 +51,11 @@ app.post('/send', (req, res) => {
     res.send('Done');
 });
 
-
-
+console.log(process.env.NODE_ENV);
 
 app.get('/stream/:id', (req, res) => {
-    fs.readdir(__dirname + '\\user_songs', (err, list) => {
+
+    fs.readdir(path.join(__dirname,"user_songs"), (err, list) => {
             if (err) {
                 throw err;
             }
@@ -79,11 +78,12 @@ app.get('/generate', (req, res) => {
 });
 
 
-server.listen(port, () => {
-    console.log('Server started on port:' + port);
+server.listen(config.app.port, () => {
+    console.log('Server started on port:' + config.app.port);
 });
 
 // File deletion starts after timeout
+
 function timeout(){
     setTimeout(() => {
         if (fileTracker.length >= 1) {
