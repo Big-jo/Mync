@@ -1,18 +1,4 @@
-/* Media Queries */
-    /*Smart Phones */
-@media only screen and (min-width: 600px){
-    .file-i{
-        width: 100%;
-    }
-}
-    /* Laptops */
-@media only screen and (min-width: 992px) and (max-width:1999px){
-    .file-i{
-        width: 50%;
-    }
-}
 
-/* Media Queries End  */
 html,
 body,
 .container
