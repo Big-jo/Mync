@@ -1,4 +1,3 @@
-
 //  TODO: Modularize the file list function(Create Routes)
 // TODO: Clean up file by choosing uniform commenting 
 
@@ -12,9 +11,13 @@ const shortid = require('shortid');
 const path = require('path');
 const config = require('./config/config');
 
+//Use morgan in dev mode
+if (process.env.NODE_ENV = 'development') {
+    const morgan = require('morgan');
+    app.use(morgan('dev'));
+}
 // Keeps track of music files coming in
 let fileTracker = [];
-// let clientTracker = []
 
 app.use(express.static('public'));
 app.use(bodyParser.json({
@@ -28,9 +31,8 @@ app.get('/', (req, res) => {
 
 
 // Erase the users music-file over-time
- 
-function eraseSong(){
-    fs.unlink("user_songs/" + fileTracker.shift(),(err)=>{
+function eraseSong() {
+    fs.unlink("user_songs/" + fileTracker.shift(), (err) => {
         if (err) {
             throw err;
         }
@@ -44,29 +46,30 @@ app.post('/send', (req, res) => {
     fs.writeFile("user_songs/" + songID, req.body.songData[1], "base64", (err) => {
         if (err) {
             throw err
-        } 
+        }
     })
     timeout();
     res.send('Done');
 });
 
-
 app.get('/stream/:id', (req, res) => {
-    fs.readdir(path.join(__dirname,"user_songs"), (err, list) => {
-            if (err) {
-                throw err;
+    fs.readdir(path.join(__dirname, "user_songs"), (err, list) => {
+        if (err) {
+            console.log(err);
+            throw err;
+        }
+        for (let id of list) {
+            if (id == req.params.id) {
+                console.log(2);
+                let stat = fs.statSync(path.join(__dirname, "user_songs", req.params.id)); // Retrieve stats of the file
+                let readStream = fs.createReadStream(path.join(__dirname, "user_songs", req.params.id)); // Creates a readStream from the song on the fileSystem
+                res.type("audio/.mp3");
+                res.set('Content-Length', stat.size)
+                readStream.pipe(res);
             }
-            list.forEach(id => {
-                if (id == req.params.id) {
-                    let stat = fs.statSync('user_songs/' + req.params.id); // Retrieve stats of the file
-                    let readStream = fs.createReadStream('user_songs/' + req.params.id); // Creates a readStream from the song on the fileSystem
-                    res.type("audio/.mp3");
-                    res.set('Content-Length', stat.size)
-                    readStream.pipe(res);
-                }
-            });
-        })
-    
+        }
+    })
+
 });
 
 app.get('/generate', (req, res) => {
@@ -81,14 +84,14 @@ server.listen(config.app.port, () => {
 
 // File deletion starts after timeout
 
-
-function timeout(){
+function timeout() {
     setTimeout(() => {
         if (fileTracker.length >= 1) {
+            console.log(fileTracker);
             eraseSong();
-        }
-        else{
+            timeout();
+        } else {
             timeout();
         }
-    }, 1800000)
+    }, config.app.timeOut)
 }

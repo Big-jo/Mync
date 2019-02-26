@@ -35,7 +35,7 @@ function M_listen(){
     let audioTag = document.getElementById('M_audioTag')
     let sourceTag = document.getElementById('M_sourceTag');
     let key = document.getElementById('key').innerHTML;
-    sourceTag.src = "stream/"+ key;
+    sourceTag.src = "stream/"+ key ;
 
     audioTag.load();
 }
@@ -82,7 +82,8 @@ function send() {
             data: JSON.stringify(songData),
             contentType: "application/json",
             success: function () {
-                M_listen();
+                $("#info").removeClass("d-none");
+                $("#btn-listen").removeClass("disabled")
             }
         })
     }

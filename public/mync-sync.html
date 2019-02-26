@@ -42,13 +42,21 @@
                         </div>
                     </div>
                     <div class="wrapper">
-                        <div class="audio-panel mt-3 mb-3">
-                            <audio controls id="M_audioTag" controlsList="nodownload">
-                                <source src="" type="audio/mp3" id="M_sourceTag">
-                            </audio>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-8">
+                                <div class="audio-panel mt-3 mb-3">
+                                    <audio controls id="M_audioTag" controlsList="nodownload">
+                                        <source src="" type="audio/mp3" id="M_sourceTag">
+                                    </audio>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-sm-4 ">
+                                <h5 id="info" class="text-success d-none">Your song is ready to listen.</h5>
+                            </div>
                         </div>
-                        <div class="mt-3">
-                            <button type="submit" onclick="send()" class="btn btn-primary">Start</button>
+                        <div class="mt-3 ">
+                            <button type="submit" onclick="send()" class="btn btn-primary d-inline">Sync</button>
+                            <button type="submit" onclick="M_listen()" id="btn-listen" class="btn btn-success d-inline disabled">Listen</button>
                         </div>
                     </div>
                 </div>

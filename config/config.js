@@ -2,13 +2,15 @@ const env = process.env.NODE_ENV;
 
 const development = {
     app:{
-        port:3000
+        port:3000,
+        timeOut: 11000
     }
 }
 
 const production = {
     app:{
-        port: process.env.PORT
+        port: process.env.PORT,
+        timeOut: 180000
     }
 }
 
