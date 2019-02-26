@@ -1,4 +1,3 @@
-/* TODO: Clean Up and Move classes to respective folders */
 /* Media Queries */
     /*Smart Phones */
 @media only screen and (min-width: 600px){
@@ -25,9 +24,7 @@ body,
     height: 100%;
     background-color: whitesmoke;
 }
-.buttons-wrapper{
-    padding: 20px;
-}
+
 .buttons-container{
     display: flex;
     padding: 10px;
@@ -36,9 +33,7 @@ body,
     position: relative;
     top:150px;
 }
-/* .wrapper{
-    height: fit-content;
-} */
+
 button{
     margin: 5px;
 }

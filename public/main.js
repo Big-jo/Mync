@@ -8,15 +8,19 @@
  */
 
 
-// TODO: Clean up by moving functions and stuff to different <i class="fa fa-files-o" aria-hidden="true"></i>
+// TODO: Clean up by moving functions and stuff to different
 
 var key;
+
+//  Websocket stuff //#endregion
+
+// var socket = io('http://localhost:3000');
+
+// TODO: Clean Up Comments, choose uniform style //#endregion
+
 /**
  * Set audio src when button is clicked
  */
-
-
-// TODO: Clean Up Comments, choose uniform style //#endregion
 function listen(){
     let audioTag = document.getElementById('audioTag')
     let sourceTag = document.getElementById('sourceTag');
@@ -31,7 +35,6 @@ function M_listen(){
     let audioTag = document.getElementById('M_audioTag')
     let sourceTag = document.getElementById('M_sourceTag');
     let key = document.getElementById('key').innerHTML;
-    console.log(key)
     sourceTag.src = "stream/"+ key;
 
     audioTag.load();

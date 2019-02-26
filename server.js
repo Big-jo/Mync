@@ -1,15 +1,20 @@
+//  TODO: Modularize the file list function(Create Routes)
+// TODO: Clean up file by choosing uniform commenting 
+
+
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const shortid = require('shortid');
-const path = require('path')
 
 
 // Keeps track of music files coming in
 let fileTracker = [];
-
+// let clientTracker = []
 
 app.use(express.static('public'));
 app.use(bodyParser.json({
@@ -22,12 +27,13 @@ app.get('/', (req, res) => {
 });
 
 
-// Erase the users music-file 
+
+
+// Erase the users music-file over-time
  
 function eraseSong(){
     fs.unlink("user_songs/" + fileTracker.shift(),(err)=>{
         if (err) {
-            console.log('unlink error',err);
             throw err;
         }
 
@@ -39,35 +45,32 @@ app.post('/send', (req, res) => {
     fileTracker.push(songID);
     fs.writeFile("user_songs/" + songID, req.body.songData[1], "base64", (err) => {
         if (err) {
-            console.log(err);
+            throw err
         } 
     })
     timeout();
     res.send('Done');
 });
 
-//  TODO: Modularize the file list function
+
+
 
 app.get('/stream/:id', (req, res) => {
     fs.readdir(__dirname + '\\user_songs', (err, list) => {
-        if (err) {
-            console.log(err);
-            throw err;
-        }
-        list.forEach(id => {
-            if (id == req.params.id) {
-                let stat = fs.statSync('user_songs/' + req.params.id ); // Retrieve stats of the file
-                let readStream = fs.createReadStream('user_songs/' + req.params.id); // Creates a readStream from the song on the fileSystem
-                res.type("audio/.mp3");
-                res.set('Content-Length', stat.size)
-                readStream.pipe(res);
+            if (err) {
+                throw err;
             }
-        });
-
-    });
- 
-     
-
+            list.forEach(id => {
+                if (id == req.params.id) {
+                    let stat = fs.statSync('user_songs/' + req.params.id); // Retrieve stats of the file
+                    let readStream = fs.createReadStream('user_songs/' + req.params.id); // Creates a readStream from the song on the fileSystem
+                    res.type("audio/.mp3");
+                    res.set('Content-Length', stat.size)
+                    readStream.pipe(res);
+                }
+            });
+        })
+    
 });
 
 app.get('/generate', (req, res) => {
@@ -76,7 +79,7 @@ app.get('/generate', (req, res) => {
 });
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('Server started on port:' + port);
 });
 
