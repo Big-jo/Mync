@@ -15,6 +15,11 @@ if (process.env.NODE_ENV = 'development') {
     app.use(morgan('dev'));
 }
 
+// Check if user_songs file exist
+if(!fs.existsSync(path.join(__dirname,"user_songs"))){
+    fs.mkdirSync(path.join(__dirname, "user_songs"));
+}
+
 // Keeps track of music files coming in
 let fileTracker = [];
 
