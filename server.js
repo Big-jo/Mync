@@ -68,36 +68,20 @@ app.post("/send", (req, res) => {
     //	 when all chuncks uploaded,
     //	 createWriteStream to "done" otherwise "partly_done"
     if (status === "done") {
-
       //	when all chunks are uploaded,create
       //    WriteStream to /uploads folder with filname
 
       let stream = fs.createWriteStream(
         path.join(__dirname, "user_songs", req.query.key)
       );
-
+      
       // 	stitch the file chuncks back
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
-
-      // 	delete chunks after file is stitched
     }
     res.send(status);
-    timeout();
   });
-
-  //Old code,left here just incase i need to revert 
-
-  // let songID = req.body.songID;
-  // fileTracker.push(songID);
-  // fs.writeFile("user_songs/" + songID, req.body.songData[0], "base64", (err) => {
-  //     if (err) {
-  //         throw err
-  //     }
-  // })
-  // timeout();
-  // res.send('Done');
 });
 
 // Handle status checks on chunks through Resumable.js
@@ -108,23 +92,44 @@ app.get("/send", function(req, res) {
   });
 });
 
+
+/** 
+ * @param IDs- contains a list of all the files gotten from the directory
+ */
 app.get("/stream/:id", (req, res) => {
-  fs.readdir(path.join(__dirname, "user_songs"), (err, list) => {
+  fs.readdir(path.join(__dirname, "user_songs"), (err, IDs) => {
     if (err) {
       console.log(err);
       throw err;
     }
-    for (let id of list) {
-      if (id == req.params.id) {
-        let stat = fs.statSync(
-          path.join(__dirname, "user_songs", req.params.id)
-        ); // Retrieve stats of the file
-        let readStream = fs.createReadStream(
-          path.join(__dirname, "user_songs", req.params.id)
-        ); // Creates a readStream from the song on the fileSystem
-        res.type("audio/.mp3");
-        res.set("Content-Length", stat.size);
-        readStream.pipe(res);
+    for (let ID of IDs) {
+      if (ID = req.params.id) {
+        const _path = (path.join(__dirname,"user_songs",ID))
+        const fileSize = fs.statSync(_path).size;
+        const range = req.headers.range;
+
+        if (range) {
+          const parts = range.replace(/bytes=/, "").split("-");
+          const start = parseInt(parts[0], 10);
+          const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+          const chunksize = end - start + 1;
+          const file = fs.createReadStream(_path, { start, end });
+          const head = {
+            "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+            "Accept-Ranges": "bytes",
+            "Content-Length": chunksize,
+            "Content-Type": "audio/mp4"
+          };
+          res.writeHead(206, head);
+          file.pipe(res);
+        } else {
+          const head = {
+            "Content-Length": filesize,
+            "Content-Type": "audio/mp4"
+          };
+          res.writeHead(200, head);
+          fs.createReadStream(path).pipe(res);
+        }
       }
     }
   });
@@ -141,9 +146,10 @@ server.listen(config.app.port, () => {
 
 // File deletion starts after timeout
 
-function timeout(identifier) {
+function timeout() {
   setTimeout(() => {
     if (fileTracker.length >= 1) {
+      console.log(fileTracker);
       eraseSong();
       timeout();
     } else {
@@ -152,9 +158,43 @@ function timeout(identifier) {
   }, config.app.timeOut);
 }
 
-/** 
+/**
  * TODO: rewwire UI to work with new file uploader and backend solution-
- * 
+ *
  * Make UI start upload on button press - on button press add generated key to query param
  * find a way to for temp folder to be cleaned up reagularly
  */
+
+// app.get("/stream/:id", (req, res) => {
+//   console.log(req.params);
+//   fs.readdir(path.join(__dirname, "user_songs"), (err, list) => {
+//     if (err) {
+//       console.log(err);
+//       throw err;
+//     }
+//     for (let id of list) {
+//       console.log(id);
+//       if (id == req.params.id) {
+//         let stat = fs.statSync(
+//           path.join(__dirname, "user_songs", req.params.id)
+//         ); // Retrieve stats of the file
+//         let readStream = fs.createReadStream(
+//           path.join(__dirname, "user_songs", req.params.id)
+//         ); // Creates a readStream from the song on the fileSystem
+//         res.type("audio/.mp3");
+//         res.set("Content-Length", stat.size);
+//         readStream.pipe(res);
+//       }
+//     }
+//   });
+// });
+
+// let songID = req.body.songID;
+// fileTracker.push(songID);
+// fs.writeFile("user_songs/" + songID, req.body.songData[0], "base64", (err) => {
+//     if (err) {
+//         throw err
+//     }
+// })
+// timeout();
+// res.send('Done');

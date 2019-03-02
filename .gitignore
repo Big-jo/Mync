@@ -3,8 +3,14 @@
 /ENV
 /.vscode
 <<<<<<< HEAD
+<<<<<<< HEAD
 /jsconfig.json
 /LICENSE
 =======
+/jsconfig.json
+>>>>>>> dev
+=======
+/jsconfig.json
+/LICENSE
 /jsconfig.json
 >>>>>>> dev

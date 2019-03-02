@@ -45,7 +45,7 @@ function M_listen() {
   let audioTag = document.getElementById("M_audioTag");
   let sourceTag = document.getElementById("M_sourceTag");
   let key = document.getElementById("key").innerHTML;
-  sourceTag.src = "stream/" + key;
+  sourceTag.src = "/stream/" + key;
 
   audioTag.load();
 }
@@ -133,6 +133,7 @@ function start(key) {
 
   r.on("fileSuccess", function(file, message) {
     progressBar.finish();
+    $('#btn-listen').removeClass('disabled')
   });
 
   r.on("progress", function() {

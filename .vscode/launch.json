@@ -18,7 +18,7 @@
             "runtimeExecutable": "nodemon",
             "program": "${workspaceFolder}/server.js",
             "restart": true,
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "internalConsoleOptions": "openOnFirstSessionStart",
                         "env": {
                             "NODE_ENV": "development"
