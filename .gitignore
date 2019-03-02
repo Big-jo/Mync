@@ -1,3 +1,5 @@
 /node_modules
 /file_list.js
 /ENV
+/.vscode
+/jsconfig.json
