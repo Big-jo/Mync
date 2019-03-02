@@ -1,0 +1,5 @@
+{
+   "typeAquisition":{
+       "include":["jquery"]
+   }
+}

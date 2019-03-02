@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "connect-multiparty": "^2.2.0",
     "express": "*",
     "express-ws": "^4.0.0",
     "morgan": "^1.9.1",
+    "request": "^2.88.0",
     "shortid": "^2.2.14",
     "socket.io": "^2.2.0"
   }
