@@ -1,0 +1,23 @@
+/* Media Queries */
+/*Smart Phones */
+@media only screen and (min-width: 600px) {
+    .file-i {
+        width: 100%;
+    }
+    .key-txt{
+        width: fit-content;
+    }
+}
+
+/* Laptops */
+@media only screen and (min-width: 992px) and (max-width:1999px) {
+    .file-i {
+        width: 50%;
+    }
+}
+
+html,
+body,
+.container {
+    height: 100%;
+}

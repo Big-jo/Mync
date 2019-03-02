@@ -1,0 +1,93 @@
+
+@media only screen and (min-width: 320px) {
+    h4{
+        font-size: 1.3rem;
+        width: inherit;
+    }
+    .carousel-content {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    
+    }
+    #text-carousel {
+        padding: 10px;
+        margin: auto;
+        width: 100%;
+        position: relative;
+        top: 150px;
+    }
+    .buttons-container {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        margin: auto;
+        width: fit-content;
+        position: relative;
+        top: 150px;
+    }
+    button{
+        width: 100%;
+    }
+
+}
+
+/* Laptops */
+@media only screen and (min-width: 992px) and (max-width:1999px) {
+    a {
+        margin: 5px;
+        font-size: 2px;
+    }
+    .buttons-container {
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        margin: auto;
+        width: fit-content;
+        position: relative;
+        top: 150px;
+    }
+
+    #text-carousel {
+        padding: 10px;
+        margin: auto;
+        width: 50%;
+        position: relative;
+        top: 150px;
+    }
+
+}
+.carousel-content {
+    display: flex;
+    align-items: center;
+
+}
+
+html,
+body,
+.container
+ {
+    height: 100%;
+}
+.container-w{
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+}
+
+.buttons-container{
+    display: flex;
+    padding: 10px;
+    margin: auto;
+    width: fit-content;
+    position: relative;
+    top:150px;
+}
+
+button{
+    margin: 5px;
+    font-size: 2px;
+}
+h1{
+    font-weight: bold;
+}
