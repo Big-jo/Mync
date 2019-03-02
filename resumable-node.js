@@ -190,7 +190,7 @@ module.exports = resumable = function(temporaryFolder){
           fs.exists(chunkFilename, function(exists) {
               if (exists) {
 
-                  console.log('exist removing ', chunkFilename);
+                  // console.log('exist removing ', chunkFilename);
                   fs.unlink(chunkFilename, function(err) {
                       if (err && options.onError) options.onError(err);
                   });

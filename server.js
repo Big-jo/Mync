@@ -27,6 +27,7 @@ if (!fs.existsSync(path.join(__dirname, "temp"))) {
 
 //	 Keeps track of music files coming in
 let fileTracker = [];
+let identiferTracker = [];
 
 app.use(express.static("public"));
 app.use(
@@ -47,6 +48,7 @@ function eraseSong() {
       throw err;
     }
   });
+  resumable.clean(identiferTracker.shift());
 }
 
 app.get("/fileid", function(req, res) {
@@ -60,26 +62,32 @@ app.post("/send", (req, res) => {
   if (!fileTracker.includes(req.query.key)) {
     fileTracker.push(req.query.key);
   }
+
   resumable.post(req, (status, filename, origin_filename, identifier) => {
+    if(!(identiferTracker.includes(identifier))) identiferTracker.push(identifier);
     //	 when all chuncks uploaded,
     //	 createWriteStream to "done" otherwise "partly_done"
     if (status === "done") {
+
       //	when all chunks are uploaded,create
       //    WriteStream to /uploads folder with filname
 
       let stream = fs.createWriteStream(
         path.join(__dirname, "user_songs", req.query.key)
       );
+
       // 	stitch the file chuncks back
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
 
       // 	delete chunks after file is stitched
-      //   resumable.clean(identifier);
     }
     res.send(status);
+    timeout();
   });
+
+  //Old code,left here just incase i need to revert 
 
   // let songID = req.body.songID;
   // fileTracker.push(songID);
@@ -101,16 +109,13 @@ app.get("/send", function(req, res) {
 });
 
 app.get("/stream/:id", (req, res) => {
-  console.log(req.params);
   fs.readdir(path.join(__dirname, "user_songs"), (err, list) => {
     if (err) {
       console.log(err);
       throw err;
     }
     for (let id of list) {
-      console.log(id);
       if (id == req.params.id) {
-        console.log(2);
         let stat = fs.statSync(
           path.join(__dirname, "user_songs", req.params.id)
         ); // Retrieve stats of the file
@@ -136,10 +141,9 @@ server.listen(config.app.port, () => {
 
 // File deletion starts after timeout
 
-function timeout() {
+function timeout(identifier) {
   setTimeout(() => {
     if (fileTracker.length >= 1) {
-      console.log(fileTracker);
       eraseSong();
       timeout();
     } else {
