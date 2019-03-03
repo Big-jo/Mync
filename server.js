@@ -20,9 +20,11 @@ if ((process.env.NODE_ENV = "development")) {
 // Check if user_songs file exist
 if (!fs.existsSync(path.join(__dirname, "user_songs"))) {
   fs.mkdirSync(path.join(__dirname, "user_songs"));
+  console.log('user_songs folder created');
 }
 if (!fs.existsSync(path.join(__dirname, "temp"))) {
   fs.mkdirSync(path.join(__dirname, "temp"));
+  console.log('temp folder created');
 }
 
 //	 Keeps track of music files coming in
@@ -62,7 +64,6 @@ app.post("/send", (req, res) => {
   if (!fileTracker.includes(req.query.key)) {
     fileTracker.push(req.query.key);
   }
-
   resumable.post(req, (status, filename, origin_filename, identifier) => {
     if(!(identiferTracker.includes(identifier))) identiferTracker.push(identifier);
     //	 when all chuncks uploaded,
@@ -79,6 +80,7 @@ app.post("/send", (req, res) => {
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
+      console.log('DONE WRITING');
     }
     res.send(status);
   });
@@ -136,8 +138,7 @@ app.get("/stream/:id", (req, res) => {
 });
 
 app.get("/generate", (req, res) => {
-  let key = shortid.generate();
-  res.send(key);
+  res.send(shortid.generate());
 });
 
 server.listen(config.app.port, () => {
