@@ -106,6 +106,7 @@ app.get("/stream/:id", (req, res) => {
     }
     for (let ID of IDs) {
       if (ID == req.params.id) {
+        console.log('song found',ID);
         const _path = (path.join(__dirname,"user_songs",ID))
         const fileSize =  fs.statSync(_path).size;
         const range = req.headers.range;
