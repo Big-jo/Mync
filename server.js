@@ -105,6 +105,7 @@ app.get("/stream/:id", (req, res) => {
       console.log(err);
       throw err;
     }
+    console.log(IDs);
     for (let ID of IDs) {
       if (ID == req.params.id) {
         console.log('song found',ID);
