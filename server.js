@@ -99,6 +99,7 @@ app.get("/send", function(req, res) {
  * @param IDs- contains a list of all the files gotten from the directory
  */
 app.get("/stream/:id", (req, res) => {
+  console.log(req.params);
   fs.readdir(path.join(__dirname, "user_songs"), (err, IDs) => {
     if (err) {
       console.log(err);
@@ -122,6 +123,7 @@ app.get("/stream/:id", (req, res) => {
             "Content-Length": chunksize,
             "Content-Type": "audio/mp4"
           };
+
           res.writeHead(206, head);
           file.pipe(res);
         }
