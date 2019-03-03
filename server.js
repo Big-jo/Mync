@@ -20,11 +20,11 @@ if ((process.env.NODE_ENV = "development")) {
 // Check if user_songs file exist
 if (!fs.existsSync(path.join(__dirname, "user_songs"))) {
   fs.mkdirSync(path.join(__dirname, "user_songs"));
-  console.log('user_songs folder created');
+  console.log("user_songs folder created");
 }
 if (!fs.existsSync(path.join(__dirname, "temp"))) {
   fs.mkdirSync(path.join(__dirname, "temp"));
-  console.log('temp folder created');
+  console.log("temp folder created");
 }
 
 //	 Keeps track of music files coming in
@@ -65,7 +65,8 @@ app.post("/send", (req, res) => {
     fileTracker.push(req.query.key);
   }
   resumable.post(req, (status, filename, origin_filename, identifier) => {
-    if(!(identiferTracker.includes(identifier))) identiferTracker.push(identifier);
+    if (!identiferTracker.includes(identifier))
+      identiferTracker.push(identifier);
     //	 when all chuncks uploaded,
     //	 createWriteStream to "done" otherwise "partly_done"
     if (status === "done") {
@@ -75,12 +76,12 @@ app.post("/send", (req, res) => {
       let stream = fs.createWriteStream(
         path.join(__dirname, "user_songs", req.query.key)
       );
-      
+
       // 	stitch the file chuncks back
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
-      console.log('DONE WRITING');
+      console.log("DONE WRITING");
     }
     res.send(status);
   });
@@ -94,47 +95,46 @@ app.get("/send", function(req, res) {
   });
 });
 
-
-/** 
+/**
  * @param IDs- contains a list of all the files gotten from the directory
  */
 app.get("/stream/:id", (req, res) => {
-  console.log(req.params);
   fs.readdir(path.join(__dirname, "user_songs"), (err, IDs) => {
     if (err) {
       console.log(err);
       throw err;
     }
-    console.log(IDs);
-    for (let ID of IDs) {
-      if (ID == req.params.id) {
-        console.log('song found',ID);
-        const _path = (path.join(__dirname,"user_songs",ID))
-        const fileSize =  fs.statSync(_path).size;
-        const range = req.headers.range;
-        if (range) {
-          const parts = range.replace(/bytes=/, "").split("-");
-          const start = parseInt(parts[0], 10);
-          const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-          const chunksize = end - start + 1;
-          const file =  fs.createReadStream(_path, { start, end });
-          const head = {
-            "Content-Range": `bytes ${start}-${end}/${fileSize}`,
-            "Accept-Ranges": "bytes",
-            "Content-Length": chunksize,
-            "Content-Type": "audio/mp4"
-          };
-
-          res.writeHead(206, head);
-          file.pipe(res);
-        }
-        else {
-          const head = {
-            "Content-Length": fileSize,
-            "Content-Type": "audio/mp4"
-          };
-          res.writeHead(200, head);
-          fs.createReadStream(_path).pipe(res);
+    if (!fs.existsSync(path.join(__dirname, "user_songs", req.params.id))) {
+      res.send("Oops Sorry,Your Song Is'nt Ready Yet");
+    } else {
+      for (let ID of IDs) {
+        if (ID == req.params.id) {
+          console.log("song found", ID);
+          const _path = path.join(__dirname, "user_songs", ID);
+          const fileSize = fs.statSync(_path).size;
+          const range = req.headers.range;
+          if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+            const chunksize = end - start + 1;
+            const file = fs.createReadStream(_path, { start, end });
+            const head = {
+              "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+              "Accept-Ranges": "bytes",
+              "Content-Length": chunksize,
+              "Content-Type": "audio/mp4"
+            };
+            res.writeHead(206, head);
+            file.pipe(res);
+          } else {
+            const head = {
+              "Content-Length": fileSize,
+              "Content-Type": "audio/mp3"
+            };
+            res.writeHead(200, head);
+            fs.createReadStream(_path).pipe(res);
+          }
         }
       }
     }
