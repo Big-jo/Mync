@@ -103,17 +103,16 @@ app.get("/stream/:id", (req, res) => {
       throw err;
     }
     for (let ID of IDs) {
-      if (ID = req.params.id) {
+      if (ID == req.params.id) {
         const _path = (path.join(__dirname,"user_songs",ID))
-        const fileSize = fs.statSync(_path).size;
+        const fileSize =  fs.statSync(_path).size;
         const range = req.headers.range;
-
         if (range) {
           const parts = range.replace(/bytes=/, "").split("-");
           const start = parseInt(parts[0], 10);
           const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
           const chunksize = end - start + 1;
-          const file = fs.createReadStream(_path, { start, end });
+          const file =  fs.createReadStream(_path, { start, end });
           const head = {
             "Content-Range": `bytes ${start}-${end}/${fileSize}`,
             "Accept-Ranges": "bytes",
@@ -122,13 +121,14 @@ app.get("/stream/:id", (req, res) => {
           };
           res.writeHead(206, head);
           file.pipe(res);
-        } else {
+        }
+        else {
           const head = {
-            "Content-Length": filesize,
+            "Content-Length": fileSize,
             "Content-Type": "audio/mp4"
           };
           res.writeHead(200, head);
-          fs.createReadStream(path).pipe(res);
+          fs.createReadStream(_path).pipe(res);
         }
       }
     }
