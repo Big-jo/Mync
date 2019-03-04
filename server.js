@@ -1,3 +1,5 @@
+process.env.PWD = process.cwd();
+
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
@@ -18,11 +20,11 @@ if ((process.env.NODE_ENV = "development")) {
 }
 
 // Check if user_songs file exist
-if (!fs.existsSync(path.join(__dirname, "user_songs"))) {
-  fs.mkdirSync(path.join(__dirname, "user_songs"));
+if (!fs.existsSync(path.join(process.env.PWD, "user_songs"))) {
+  fs.mkdirSync(path.join(process.env.PWD, "user_songs"));
 }
-if (!fs.existsSync(path.join(__dirname, "temp"))) {
-  fs.mkdirSync(path.join(__dirname, "temp"));
+if (!fs.existsSync(path.join(process.env.PWD, "temp"))) {
+  fs.mkdirSync(path.join(process.env.PWD, "temp"));
 }
 
 
@@ -39,7 +41,7 @@ app.use(
 app.use(multipart());
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index", "index.html"));
+  res.sendFile(path.join(process.env.PWD, "public", "index", "index.html"));
 });
 
 // 	Erase the users music-file over-time
@@ -59,7 +61,7 @@ app.get("/fileid", function(req, res) {
 });
 
 app.post("/send", (req, res) => {
-  if (!fs.existsSync(path.join(__dirname, "temp"))) {
+  if (!fs.existsSync(path.join(process.env.PWD, "temp"))) {
     throw err;
   }
   // store key in fileTracker
@@ -76,7 +78,7 @@ app.post("/send", (req, res) => {
       //    WriteStream to /uploads folder with filname
 
       let stream = fs.createWriteStream(
-        path.join(__dirname, "user_songs", req.query.key)
+        path.join(process.env.PWD, "user_songs", req.query.key)
       );
 
       // 	stitch the file chuncks back
@@ -102,18 +104,18 @@ app.get("/send", function(req, res) {
  */
 app.get("/stream/:id", (req, res) => {
   console.log(req.params);
-  fs.readdir(path.join(__dirname, "user_songs"), (err, IDs) => {
+  fs.readdir(path.join(process.env.PWD, "user_songs"), (err, IDs) => {
     if (err) {
       console.log(err);
       throw err;
     }
-    if (!fs.existsSync(path.join(__dirname, "user_songs", req.params.id))) {
+    if (!fs.existsSync(path.join(process.env.PWD, "user_songs", req.params.id))) {
       res.send("Oops Sorry,Your Song Is'nt Ready Yet");
     } else {
       for (let ID of IDs) {
         if (ID == req.params.id) {
           console.log("song found", ID);
-          const _path = path.join(__dirname, "user_songs", ID);
+          const _path = path.join(process.env.PWD, "user_songs", ID);
           const fileSize = fs.statSync(_path).size;
           const range = req.headers.range;
           if (range) {
@@ -175,7 +177,7 @@ function timeout() {
 
 // app.get("/stream/:id", (req, res) => {
 //   console.log(req.params);
-//   fs.readdir(path.join(__dirname, "user_songs"), (err, list) => {
+//   fs.readdir(path.join(process.env.PWD, "user_songs"), (err, list) => {
 //     if (err) {
 //       console.log(err);
 //       throw err;
@@ -184,10 +186,10 @@ function timeout() {
 //       console.log(id);
 //       if (id == req.params.id) {
 //         let stat = fs.statSync(
-//           path.join(__dirname, "user_songs", req.params.id)
+//           path.join(process.env.PWD, "user_songs", req.params.id)
 //         ); // Retrieve stats of the file
 //         let readStream = fs.createReadStream(
-//           path.join(__dirname, "user_songs", req.params.id)
+//           path.join(process.env.PWD, "user_songs", req.params.id)
 //         ); // Creates a readStream from the song on the fileSystem
 //         res.type("audio/.mp3");
 //         res.set("Content-Length", stat.size);
