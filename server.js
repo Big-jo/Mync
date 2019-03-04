@@ -20,12 +20,11 @@ if ((process.env.NODE_ENV = "development")) {
 // Check if user_songs file exist
 if (!fs.existsSync(path.join(__dirname, "user_songs"))) {
   fs.mkdirSync(path.join(__dirname, "user_songs"));
-  console.log("user_songs folder created");
 }
 if (!fs.existsSync(path.join(__dirname, "temp"))) {
   fs.mkdirSync(path.join(__dirname, "temp"));
-  console.log("temp folder created");
 }
+
 
 //	 Keeps track of music files coming in
 let fileTracker = [];
@@ -60,6 +59,9 @@ app.get("/fileid", function(req, res) {
 });
 
 app.post("/send", (req, res) => {
+  if (!fs.existsSync(path.join(__dirname, "temp"))) {
+    throw err;
+  }
   // store key in fileTracker
   if (!fileTracker.includes(req.query.key)) {
     fileTracker.push(req.query.key);
@@ -81,7 +83,7 @@ app.post("/send", (req, res) => {
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
-      console.log("DONE WRITING");
+      console.log('DONE WRITNG');
     }
     res.send(status);
   });
@@ -99,6 +101,7 @@ app.get("/send", function(req, res) {
  * @param IDs- contains a list of all the files gotten from the directory
  */
 app.get("/stream/:id", (req, res) => {
+  console.log(req.params);
   fs.readdir(path.join(__dirname, "user_songs"), (err, IDs) => {
     if (err) {
       console.log(err);
