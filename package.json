@@ -2,9 +2,13 @@
   "name": "mync",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node":"10.6.0",
+    "npm":"6.1.0"
   },
   "author": "Henshaw Joseph",
   "license": "ISC",
