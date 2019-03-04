@@ -82,6 +82,7 @@ app.post("/send", (req, res) => {
       resumable.write(identifier, stream);
       stream.on("data", data => {});
       stream.on("end", () => {});
+      console.log('DONE WRIITING');
     }
 
     res.send(status);
