@@ -9,7 +9,7 @@ const fs = require("fs");
 const shortid = require("shortid");
 const path = require("path");
 const config = require("./config/config");
-const resumable = require("./resumable-node")("./temp");
+const resumable = require("./resumable-node")(path.join(process.env.PWD,"./temp"));
 const crypto = require("crypto");
 const multipart = require("connect-multiparty");
 
