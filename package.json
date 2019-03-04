@@ -4,20 +4,21 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "engines": {
-    "node":"10.6.0",
-    "npm":"6.1.0"
+    "node": "10.6.0",
+    "npm": "6.1.0"
   },
   "author": "Henshaw Joseph",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "connect-multiparty": "^2.2.0",
-    "express": "*",
+    "express": "4.16.0",
     "express-ws": "^4.0.0",
     "morgan": "^1.9.1",
+    "mv": "^2.1.1",
     "request": "^2.88.0",
     "shortid": "^2.2.14",
     "socket.io": "^2.2.0"

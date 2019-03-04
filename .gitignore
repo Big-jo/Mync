@@ -2,3 +2,7 @@
 /file_list.js
 /ENV
 /.vscode
+/boxfile.yml
+/.nanoignore
+/config/nginx.conf
+/.yarn

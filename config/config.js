@@ -9,7 +9,7 @@ const development = {
 
 const production = {
     app:{
-        port: process.env.PORT,
+        port: process.env.PORT || 5000,
         timeOut: 1800000
     }
 }
