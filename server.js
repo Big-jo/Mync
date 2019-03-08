@@ -106,11 +106,8 @@ app.get("/stream/:id", (req, res) => {
       console.log(err);
       throw err;
     }
-    if (
-      !fs.existsSync(
-        path.join(path.join(__dirname, "user_songs"), req.params.id)
-      )
-    ) {
+    if (!fs.existsSync( path.join(path.join(__dirname, "user_songs"), req.params.id))) {
+      
       res.send("Oops Sorry,Your Song Is'nt Ready Yet");
     } else {
       for (let ID of IDs) {
